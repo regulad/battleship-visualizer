@@ -1,7 +1,8 @@
-import Image from "next/image";
 import Gameboard from "@/app/ui/gameboard";
 import BoardHeader from "@/app/ui/header";
 import ResetButton from "@/app/ui/reset";
+import {Suspense} from "react";
+import GameboardSkeleton from "@/app/ui/skeleton";
 
 export default function Home() {
   return (
@@ -12,11 +13,15 @@ export default function Home() {
       <div className="flex flex-row items-center justify-between">
         <div className={"flex-auto p-8"}>
           <BoardHeader playerName={"Player 1"}/>
-          <Gameboard boardId={"l"}/>
+          <Suspense fallback={<GameboardSkeleton/>}>
+            <Gameboard boardId={"l"}/>
+          </Suspense>
         </div>
         <div className={"flex-auto p-8"}>
           <BoardHeader playerName={"Player 2"}/>
-          <Gameboard boardId={"r"}/>
+          <Suspense fallback={<GameboardSkeleton/>}>
+            <Gameboard boardId={"r"}/>
+          </Suspense>
         </div>
       </div>
     </main>

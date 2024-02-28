@@ -32,6 +32,17 @@ function HeaderCell({text}: { text: string }) {
   );
 }
 
+function DummyGameCell() {
+  return (
+    <BaseCell>
+      <div
+        className={"w-full h-full py-2 rounded aspect-square flex justify-center items-center bg-gray-200 animate-pulse"}>
+        <div className={"w-1/3 h-1/3 p-1 rounded-full bg-gray-300"}/>
+      </div>
+    </BaseCell>
+  );
+}
+
 function GameCell({horizontal, vertical, cellState, updateBoardState}: {
   horizontal: number,
   vertical: number,
@@ -69,7 +80,7 @@ function GameCell({horizontal, vertical, cellState, updateBoardState}: {
 export function TableRow({rowState, rowId, updateBoardState}: {
   rowState: CellState[] | null,
   rowId: number,
-  updateBoardState: BoardStateUpdater
+  updateBoardState: BoardStateUpdater | null
 }) {
   if (rowState == null) {
     return (
@@ -87,10 +98,14 @@ export function TableRow({rowState, rowId, updateBoardState}: {
   return (
     <tr>
       <HeaderCell text={indexToLetter(rowIndex)}/>
-      {rowState.map((cellState, i) => (
-        <GameCell cellState={cellState} updateBoardState={updateBoardState} vertical={rowId - 1} horizontal={i}
-                  key={i << rowIndex}/>
-      ))}
+      {rowState.map((cellState, i) => {
+        if (updateBoardState == null) {
+          return <DummyGameCell key={i}/>;
+        } else {
+          return <GameCell horizontal={i} vertical={rowIndex} cellState={cellState} updateBoardState={updateBoardState}
+                           key={i}/>;
+        }
+      })}
     </tr>
   );
 }
