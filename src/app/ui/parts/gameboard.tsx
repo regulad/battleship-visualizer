@@ -2,8 +2,8 @@
 
 import {useQueryState} from "nuqs";
 import {BoardState, CellState, initialState} from "@/app/lib/state";
-import {TableRow} from "@/app/ui/cells";
-import {inflate, deflate} from "pako";
+import {TableRow} from "@/app/ui/parts/cells";
+import {deflate, inflate} from "pako";
 import {base64ToBytes, bytesToBase64} from "byte-base64";
 
 const ENCODER = new TextEncoder();

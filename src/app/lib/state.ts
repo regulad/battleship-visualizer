@@ -20,5 +20,9 @@ export function nextCellState(cellState: CellState): CellState {
 
 export type BoardState = readonly CellState[][];
 
-export const initialState = Array(10).fill(null).map(() => Array(10).fill(CellState.Empty)) as BoardState;
-export const skeletonState = Array(10).fill(null).map(() => Array(10).fill(CellState.Miss)) as BoardState;
+export function boardOf(state: CellState) {
+  return Array(10).fill(null).map(() => Array(10).fill(state)) as BoardState;
+}
+
+export const initialState = boardOf(CellState.Empty);
+export const skeletonState = boardOf(CellState.Miss);

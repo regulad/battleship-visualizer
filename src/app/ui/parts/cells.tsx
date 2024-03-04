@@ -32,23 +32,22 @@ function HeaderCell({text}: { text: string }) {
   );
 }
 
-function DummyGameCell() {
-  return (
-    <BaseCell>
-      <div
-        className={"w-full h-full py-2 rounded aspect-square flex justify-center items-center bg-gray-200 animate-pulse"}>
-        <div className={"w-1/3 h-1/3 p-1 rounded-full bg-gray-300"}/>
-      </div>
-    </BaseCell>
-  );
-}
-
 function GameCell({horizontal, vertical, cellState, updateBoardState}: {
   horizontal: number,
   vertical: number,
   cellState: CellState,
-  updateBoardState: BoardStateUpdater
+  updateBoardState: BoardStateUpdater | null
 }) {
+  const nextState = nextCellState(cellState);
+  let extraParams;
+  if (updateBoardState != null) {
+    let boardStateUpdater = updateBoardState.bind(null, horizontal, vertical, nextState);
+    extraParams = {
+      onClick: boardStateUpdater
+    }
+  } else {
+    extraParams = {};
+  }
   return (
     <BaseCell>
       <div className={clsx(
@@ -58,10 +57,9 @@ function GameCell({horizontal, vertical, cellState, updateBoardState}: {
           "bg-red-500": cellState === CellState.Hit,
           "bg-gray-100": cellState === CellState.Miss,
           "bg-gray-500": cellState === CellState.Ship,
+          "animate-pulse": updateBoardState == null, // this is a skeleton
         }
-      )} onClick={async () => {
-        await updateBoardState(horizontal, vertical, nextCellState(cellState));
-      }}>
+      )} {...extraParams}>
         {/* small dot */}
         <div className={clsx(
           "w-1/3 h-1/3 p-1 rounded-full",
@@ -99,12 +97,8 @@ export function TableRow({rowState, rowId, updateBoardState}: {
     <tr>
       <HeaderCell text={indexToLetter(rowIndex)}/>
       {rowState.map((cellState, i) => {
-        if (updateBoardState == null) {
-          return <DummyGameCell key={i}/>;
-        } else {
-          return <GameCell horizontal={i} vertical={rowIndex} cellState={cellState} updateBoardState={updateBoardState}
-                           key={i}/>;
-        }
+        return <GameCell horizontal={i} vertical={rowIndex} cellState={cellState} updateBoardState={updateBoardState}
+                         key={i}/>;
       })}
     </tr>
   );

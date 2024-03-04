@@ -1,8 +1,5 @@
 import {skeletonState} from "@/app/lib/state";
-import {TableRow} from "@/app/ui/cells";
-
-const ENCODER = new TextEncoder();
-const DECODER = new TextDecoder();
+import {TableRow} from "@/app/ui/parts/cells";
 
 export default function GameboardSkeleton() {
   const boardState = skeletonState;
